@@ -1,3 +1,5 @@
+using Blok1.Models;
+
 namespace Blok1
 {
     public class Program
@@ -8,6 +10,7 @@ namespace Blok1
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddDbContext<MeesDbContext>();
 
             var app = builder.Build();
 
