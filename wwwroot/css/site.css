@@ -1,3 +1,7 @@
+* {
+    font-family: 'Poppins', sans-serif;
+}
+
 html {
   font-size: 14px;
 }
@@ -19,4 +23,45 @@ html {
 
 body {
   margin-bottom: 60px;
+}
+
+body {
+  background-color: #121212;
+}
+
+.Welkom {
+    font-family: 'inter';
+    font-size: 4rem;
+    color: #7f32fd;
+    text-align: center;
+    font-weight: bold;
+}
+
+.WelkomU {
+    font-size: 1rem;
+    color: #fbfbfb;
+    text-align: center;
+    font-weight: 700;
+}
+
+.Product {
+    font-size: 2.5rem;
+    color: #7f32fd;
+    text-align: center;
+}
+
+.tableheader {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fbfbfb;
+}
+
+.tabledata {
+    font-size: 1rem;
+    font-weight: 200;
+    color: #fbfbfb;
+}
+
+.whitetext {
+    color: #fbfbfb !important;
 }
