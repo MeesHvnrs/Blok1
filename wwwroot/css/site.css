@@ -65,3 +65,14 @@ body {
 .whitetext {
     color: #fbfbfb !important;
 }
+
+.btn-color {
+    background-color: #7f32fd;
+    color: #fbfbfb;
+    border: 0px
+}
+
+.btn-color:hover {
+    background-color: #fbfbfb;
+    color: #7f32fd;
+}
