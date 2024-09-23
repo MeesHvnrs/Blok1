@@ -76,3 +76,9 @@ body {
     background-color: #fbfbfb;
     color: #7f32fd;
 }
+
+.warningtext {
+    color: #dc3545;
+    font-size: 1rem;
+    font-weight: 200;
+}
