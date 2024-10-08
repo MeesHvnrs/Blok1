@@ -1,4 +1,5 @@
-using Blok1.Models;
+using Blok1.Data.Models;
+using Blok1.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 

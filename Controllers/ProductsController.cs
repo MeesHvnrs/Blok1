@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Blok1.Data;
+using Blok1.Data.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Blok1.Models;
 
 namespace Blok1.Controllers
 {
@@ -21,7 +18,8 @@ namespace Blok1.Controllers
         // GET: Products
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Products.ToListAsync());
+            var meesDbContext = _context.Products.Include(p => p.Category);
+            return View(await meesDbContext.ToListAsync());
         }
 
         // GET: Products/Details/5
@@ -33,6 +31,7 @@ namespace Blok1.Controllers
             }
 
             var product = await _context.Products
+                .Include(p => p.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (product == null)
             {
@@ -43,8 +42,10 @@ namespace Blok1.Controllers
         }
 
         // GET: Products/Create
+        [HttpGet]
         public IActionResult Create()
         {
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
             return View();
         }
 
@@ -52,17 +53,36 @@ namespace Blok1.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Comment,Price,ColorChange")] Product product)
+        public async Task<IActionResult> Create([Bind("Id,Name,Comment,Price,ColorChange,CategoryId,GifFile")] Product product)
         {
             if (ModelState.IsValid)
             {
+                if (product.GifFile != null && product.GifFile.Length > 0)
+                {
+                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(product.GifFile.FileName);
+                    var filePath = Path.Combine("wwwroot/Gifs", fileName);
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await product.GifFile.CopyToAsync(stream);
+                    }
+
+                    product.GifPath = "/Gifs/" + fileName;
+                }
+
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+
+            // Voeg deze regel toe wanneer de validatie faalt en je de view opnieuw moet laden
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
+
             return View(product);
         }
+
+
+
 
         // GET: Products/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -77,6 +97,7 @@ namespace Blok1.Controllers
             {
                 return NotFound();
             }
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
             return View(product);
         }
 
@@ -85,7 +106,7 @@ namespace Blok1.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Comment,Price,ColorChange")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,GifPath,Comment,Price,ColorChange,CategoryId")] Product product)
         {
             if (id != product.Id)
             {
@@ -112,6 +133,7 @@ namespace Blok1.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
             return View(product);
         }
 
@@ -124,6 +146,7 @@ namespace Blok1.Controllers
             }
 
             var product = await _context.Products
+                .Include(p => p.Category)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (product == null)
             {

@@ -1,14 +1,15 @@
-﻿@model Blok1.Models.Product
+﻿@model Blok1.Data.Models.Product
 
 @{
     ViewData["Title"] = "Edit";
 }
 
-<h1 class="Product">Edit product</h1>
+<h1>Edit</h1>
 
+<h4>Product</h4>
 <hr />
-<div class="row white">
-    <div class="col-md-4 whitetext">
+<div class="row">
+    <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
@@ -16,6 +17,11 @@
                 <label asp-for="Name" class="control-label"></label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GifPath" class="control-label"></label>
+                <input asp-for="GifPath" class="form-control" />
+                <span asp-validation-for="GifPath" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Comment" class="control-label"></label>
@@ -33,7 +39,12 @@
                 </label>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary btn-color" />
+                <label asp-for="CategoryId" class="control-label"></label>
+                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>

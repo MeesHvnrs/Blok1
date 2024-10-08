@@ -1,4 +1,4 @@
-namespace Blok1.Models
+namespace Blok1.Data.Models
 {
     public class ErrorViewModel
     {
