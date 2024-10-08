@@ -8,6 +8,7 @@
 
 <p>
     <a asp-action="Create">Create New</a>
+    <a asp-action="Overview">revenue Overzicht</a>
 </p>
 <table class="table">
     <thead>
@@ -39,9 +40,16 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.GifPath)
-            </td>
+                <td>
+                    @if (!string.IsNullOrEmpty(item.GifPath))
+                    {
+                        <img src="@item.GifPath" alt="@item.Name" style="width: 100px; height: auto;" />
+                    }
+                    else
+                    {
+                        <span>No Image</span>
+                    }
+                </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Comment)
             </td>

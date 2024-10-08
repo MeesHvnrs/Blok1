@@ -20,10 +20,10 @@ namespace Blok1.Data
                 .WithMany(o => o.OrderProducts)
                 .HasForeignKey(ol => ol.OrderId);
 
-            modelBuilder.Entity<Orderline>()
-                .HasOne(ol => ol.Product)
-                .WithMany(p => p.OrderProducts)
-                .HasForeignKey(ol => ol.ProductId);
+           // modelBuilder.Entity<Orderline>()
+           //    .HasOne(ol => ol.Product)
+           //   .WithMany(p => p.OrderProducts)
+           //   .HasForeignKey(ol => ol.ProductId);
 
             Product product1 = new Product
             {

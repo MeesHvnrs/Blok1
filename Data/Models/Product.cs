@@ -9,9 +9,9 @@ namespace Blok1.Data.Models
         public int Id { get; set; }
         [Required]
         public string Name { get; set; } = null!;
-        public string? GifPath { get; set; }
+        public string? GifPath { get; set; } 
         [NotMapped]
-        public IFormFile? GifFile { get; set; } = null!;
+        public IFormFile? GifFile { get; set; }
 
         public string? Comment { get; set; }
         [Required]
@@ -21,9 +21,5 @@ namespace Blok1.Data.Models
 
         public int CategoryId { get; set; }
         public Category? Category { get; set; } = null!;
-
-        public ICollection<Orderline> OrderProducts { get; set; } = new List<Orderline>();
     }
 }
-
-

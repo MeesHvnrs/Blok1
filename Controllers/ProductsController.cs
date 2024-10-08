@@ -1,8 +1,12 @@
-﻿using Blok1.Data;
-using Blok1.Data.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Blok1.Data;
+using Blok1.Data.Models;
 
 namespace Blok1.Controllers
 {
@@ -42,7 +46,6 @@ namespace Blok1.Controllers
         }
 
         // GET: Products/Create
-        [HttpGet]
         public IActionResult Create()
         {
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
@@ -53,35 +56,41 @@ namespace Blok1.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        public async Task<IActionResult> Create([Bind("Id,Name,Comment,Price,ColorChange,CategoryId,GifFile")] Product product)
+        public async Task<IActionResult> Create([Bind("Id,Name,Comment,Price,ColorChange,CategoryId")] Product product, IFormFile GifFile)
         {
+            // Valideer alleen het GIF-bestand zonder het in ModelState te zetten
+            if (GifFile == null || GifFile.Length == 0)
+            {
+                ModelState.AddModelError("GifFile", "Het GIF-bestand is verplicht.");
+            }
+
             if (ModelState.IsValid)
             {
-                if (product.GifFile != null && product.GifFile.Length > 0)
+                // Verwerk het GIF-bestand
+                if (GifFile != null && GifFile.Length > 0)
                 {
-                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(product.GifFile.FileName);
+                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(GifFile.FileName);
                     var filePath = Path.Combine("wwwroot/Gifs", fileName);
 
                     using (var stream = new FileStream(filePath, FileMode.Create))
                     {
-                        await product.GifFile.CopyToAsync(stream);
+                        await GifFile.CopyToAsync(stream);
                     }
 
+                    // Sla het pad van het bestand op in het productmodel
                     product.GifPath = "/Gifs/" + fileName;
                 }
 
+                // Sla het product op in de database
                 _context.Add(product);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
-            // Voeg deze regel toe wanneer de validatie faalt en je de view opnieuw moet laden
+            // Laad de categorieën opnieuw als er een fout is
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
-
             return View(product);
         }
-
-
 
 
         // GET: Products/Edit/5
