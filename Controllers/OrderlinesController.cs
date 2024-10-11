@@ -58,18 +58,29 @@ namespace Blok1.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("OrderId,ProductId,Quantity,CustomName,CustomColor")] Orderline orderline)
+        public async Task<IActionResult> Create(Order order, List<int> productIds)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(orderline);
-                await _context.SaveChangesAsync(); 
+                // Sla de order op
+                _context.Orders.Add(order);
+                await _context.SaveChangesAsync();
+
+                // Voeg de producten toe aan de order
+                foreach (var productId in productIds)
+                {
+                    var orderProduct = new Orderline
+                    {
+                        OrderId = order.OrderId,
+                        ProductId = productId
+                    };
+                    _context.OrderProducts.Add(orderProduct);
+                }
+                await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["OrderId"] = new SelectList(_context.Orders, "OrderId", "OrderId", orderline.OrderId);
-            ViewData["ProductId"] = new SelectList(_context.Products, "Id", "Name", orderline.ProductId);
-            return View(orderline);
+            return View(order);
         }
 
         // GET: Orderlines/Edit/5
@@ -95,7 +106,7 @@ namespace Blok1.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("OrderProductId,OrderId,ProductId,Quantity,CustomName,CustomColor")] Orderline orderline)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,OrderId,ProductId,Quantity,CustomName,CustomColor")] Orderline orderline)
         {
             if (id != orderline.OrderId)
             {
@@ -111,7 +122,7 @@ namespace Blok1.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!OrderlineExists(orderline.OrderId))
+                    if (!OrderlineExists(orderline.Id))
                     {
                         return NotFound();
                     }
@@ -138,7 +149,7 @@ namespace Blok1.Controllers
             var orderline = await _context.OrderProducts
                 .Include(o => o.Order)
                 .Include(o => o.Product)
-                .FirstOrDefaultAsync(m => m.OrderId == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (orderline == null)
             {
                 return NotFound();
@@ -162,9 +173,9 @@ namespace Blok1.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool OrderlineExists(int id)
+        private bool OrderlineExists(int? id)
         {
-            return _context.OrderProducts.Any(e => e.OrderId == id);
+            return _context.OrderProducts.Any(e => e.Id == id);
         }
     }
 }

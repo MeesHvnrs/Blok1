@@ -12,19 +12,6 @@ namespace Blok1.Data
         public DbSet<Orderline> OrderProducts { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Orderline>()
-                .HasKey(ol => new { ol.OrderId, ol.ProductId });
-
-            modelBuilder.Entity<Orderline>()
-                .HasOne(ol => ol.Order)
-                .WithMany(o => o.OrderProducts)
-                .HasForeignKey(ol => ol.OrderId);
-
-           // modelBuilder.Entity<Orderline>()
-           //    .HasOne(ol => ol.Product)
-           //   .WithMany(p => p.OrderProducts)
-           //   .HasForeignKey(ol => ol.ProductId);
-
             Product product1 = new Product
             {
                 Id = 1,

@@ -16,7 +16,7 @@ namespace Blok1.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.8")
+                .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -63,11 +63,11 @@ namespace Blok1.Migrations
 
             modelBuilder.Entity("Blok1.Data.Models.Orderline", b =>
                 {
-                    b.Property<int>("OrderId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CustomColor")
                         .HasColumnType("nvarchar(max)");
@@ -76,13 +76,15 @@ namespace Blok1.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("OrderProductId")
+                    b.Property<int>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Quantity")
+                    b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.HasKey("OrderId", "ProductId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
 
                     b.HasIndex("ProductId");
 
@@ -113,8 +115,8 @@ namespace Blok1.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Price")
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -130,7 +132,7 @@ namespace Blok1.Migrations
                             ColorChange = true,
                             Comment = "Blood effect logo",
                             Name = "bloody",
-                            Price = 10.0
+                            Price = 10m
                         });
                 });
 
@@ -143,7 +145,7 @@ namespace Blok1.Migrations
                         .IsRequired();
 
                     b.HasOne("Blok1.Data.Models.Product", "Product")
-                        .WithMany("OrderProducts")
+                        .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -170,11 +172,6 @@ namespace Blok1.Migrations
                 });
 
             modelBuilder.Entity("Blok1.Data.Models.Order", b =>
-                {
-                    b.Navigation("OrderProducts");
-                });
-
-            modelBuilder.Entity("Blok1.Data.Models.Product", b =>
                 {
                     b.Navigation("OrderProducts");
                 });

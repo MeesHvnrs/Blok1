@@ -15,7 +15,7 @@ namespace Blok1.Data.Models
 
         public string? Comment { get; set; }
         [Required]
-        public double Price { get; set; }
+        public decimal Price { get; set; }
 
         public bool ColorChange { get; set; }
 
