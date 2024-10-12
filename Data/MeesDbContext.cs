@@ -33,7 +33,7 @@ namespace Blok1.Data
             };
 
             modelBuilder.Entity<Category>()
-                .HasData(category1);
+                .HasData(category1);    
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

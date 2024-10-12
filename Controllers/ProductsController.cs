@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Blok1.Data;
 using Blok1.Data.Models;
+using Blok1.ViewModels;
 
 namespace Blok1.Controllers
 {
@@ -24,6 +25,27 @@ namespace Blok1.Controllers
         {
             var meesDbContext = _context.Products.Include(p => p.Category);
             return View(await meesDbContext.ToListAsync());
+        }
+
+        public async Task<IActionResult> OverviewRevenue()
+        {
+            // Eerst data ophalen uit db en verwerken
+            _context.Orders
+                .Include(o => o.OrderProducts)
+                .SelectMany(o => o.OrderProducts)
+                .GroupBy(p => p.ProductId)
+                .Select(g => new ProductRevenueViewModel
+                {
+                    ProductName = g.Key,
+                    Revenue = g.Sum(p => p.Product.Price)
+                });
+            // Lijst maken met data in viewmodel
+
+            // De juiste view aanroepen met de data
+
+
+
+            return View(await _context.Product.ToListAsync());
         }
 
         // GET: Products/Details/5
