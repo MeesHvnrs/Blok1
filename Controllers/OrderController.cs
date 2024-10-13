@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Blok1.Data;
 using Blok1.Data.Models;
+using Blok1.Enums;
+using Blok1.ViewModels;
 
 namespace Blok1.Controllers
 {
@@ -22,7 +24,7 @@ namespace Blok1.Controllers
         // GET: Order
         public async Task<IActionResult> Index()
         {
-            var meesDbContext = _context.OrderProducts.Include(o => o.Order).Include(o => o.Product);
+            var meesDbContext = _context.OrderProducts.Include(o => o.Order).Where(o => o.Order!.Status == Enums.OrderStatus.New).Include(o => o.Product);
             return View(await meesDbContext.ToListAsync());
         }
 
@@ -46,6 +48,22 @@ namespace Blok1.Controllers
             return View(orderline);
         }
 
+        // GET: Order/Details/5
+        public IActionResult OrderStatus()
+        {
+            var orderStatus = _context.Orders
+                .Where(o => o.Status == Enums.OrderStatus.Done)
+                .Select(o => new OrderStatusViewModel
+                {
+                    OrderId = o.OrderId,
+                    Status = o.Status
+                }).ToList();
+
+            return View(orderStatus);
+        }
+
+
+
         // GET: Order/Create
         public IActionResult Create()
         {
@@ -63,7 +81,7 @@ namespace Blok1.Controllers
         {
             if (ModelState.IsValid)
             {
-                var order = _context.Orders.Include(o => o.OrderProducts).FirstOrDefault(o => o.Afgehandeld == false) ?? new Order();
+                var order = _context.Orders.Include(o => o.OrderProducts).FirstOrDefault(o => o.Status == Enums.OrderStatus.New) ?? new Order();
                 order.OrderProducts.Add(orderline);
 
                 _context.Update(order);

@@ -1,5 +1,6 @@
 * {
     font-family: 'Poppins', sans-serif;
+    color: #fbfbfb !important;
 }
 
 html {
@@ -26,7 +27,7 @@ body {
 }
 
 body {
-    background-color: #fbfbfb;
+    background-color: #121212;
 }
 
 .Welkom {

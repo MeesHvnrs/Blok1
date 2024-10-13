@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Blok1.ViewModels.OrderStatusViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>DoneStatus</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+@*                 @Html.DisplayNameFor(model => model.ProductName) *@
+                Order ID
+            </th>
+
+            <th>
+@*                 @Html.DisplayNameFor(model => model.ProductName) *@
+                Order State
+            </th>
+
+            <th>
+                Order Info
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @item.OrderId
+            </td>
+
+            <td>
+                @item.Status
+            </td>
+
+            <td>
+                    <a class="nav-link" asp-area="" asp-controller="OrderDetails" asp-action="Details">Details</a>
+            
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

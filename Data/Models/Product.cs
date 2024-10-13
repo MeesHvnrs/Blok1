@@ -15,6 +15,7 @@ namespace Blok1.Data.Models
 
         public string? Comment { get; set; }
         [Required]
+        [DataType(DataType.Currency)]
         public decimal Price { get; set; }
 
         public bool ColorChange { get; set; }

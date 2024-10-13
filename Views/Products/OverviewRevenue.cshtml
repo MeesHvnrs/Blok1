@@ -1,73 +1,9 @@
-﻿@model IEnumerable<Blok1.Data.Models.Product>
+﻿@model Blok1.ViewModels.ProductRevenueViewModel;
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Revenue overview";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-    <a asp-action="OverviewRevenue">Revenue Overzicht</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.GifPath)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Comment)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ColorChange)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-                <td>
-                    @if (!string.IsNullOrEmpty(item.GifPath))
-                    {
-                        <img src="@item.GifPath" alt="@item.Name" style="width: 100px; height: auto;" />
-                    }
-                    else
-                    {
-                        <span>No Image</span>
-                    }
-                </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Comment)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ColorChange)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.Name)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+<h1>Revenue overview</h1>
+<p>The total revenue of all products in USD is:</p>
+@Model.Revenue

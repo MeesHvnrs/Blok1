@@ -20,6 +20,12 @@ namespace Blok1.Controllers
             _context = context;
         }
 
+        public async Task<IActionResult> Index2()
+        {
+            var meesDbContext = _context.Products.Include(p => p.Category);
+            return View(await meesDbContext.ToListAsync());
+        }
+
         // GET: Products
         public async Task<IActionResult> Index()
         {
@@ -30,22 +36,18 @@ namespace Blok1.Controllers
         public async Task<IActionResult> OverviewRevenue()
         {
             // Eerst data ophalen uit db en verwerken
-            _context.Orders
+            var revenue = _context.Orders
                 .Include(o => o.OrderProducts)
-                .SelectMany(o => o.OrderProducts)
-                .GroupBy(p => p.ProductId)
-                .Select(g => new ProductRevenueViewModel
-                {
-                    ProductName = g.Key,
-                    Revenue = g.Sum(p => p.Product.Price)
-                });
-            // Lijst maken met data in viewmodel
+                .ThenInclude(op => op.Product)
+                .Where(o => o.Status == Enums.OrderStatus.Done)
+                .SelectMany(o => o.OrderProducts.Select(op => op.Product!.Price))
+                .Sum();
 
-            // De juiste view aanroepen met de data
-
-
-
-            return View(await _context.Product.ToListAsync());
+            return View(new ProductRevenueViewModel
+            {
+                ProductName = "X",
+                Revenue = revenue
+            });
         }
 
         // GET: Products/Details/5
