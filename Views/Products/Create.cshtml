@@ -42,19 +42,19 @@
                     <input class="form-check-input" asp-for="ColorChange" /> @Html.DisplayNameFor(model => model.ColorChange)
                 </label>
             </div>
-            <div class="form-group">
+            <div class="form-group blacktext">
                 <label asp-for="CategoryId" class="control-label"></label>
-                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
+                <select asp-for="CategoryId" class="form-control form-control-black" asp-items="ViewBag.CategoryId" class="blacktext"></select>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-primary btn-color" />
             </div>
         }
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action ="Index" class="btn btn-primary btn-color">Back to List</a>
 </div>
 
 @section Scripts {

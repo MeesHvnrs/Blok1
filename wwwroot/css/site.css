@@ -1,6 +1,5 @@
 * {
     font-family: 'Poppins', sans-serif;
-    color: #fbfbfb !important;
 }
 
 html {
@@ -27,7 +26,7 @@ body {
 }
 
 body {
-    background-color: #121212;
+    background-color: #f0edff;
 }
 
 .Welkom {
@@ -67,6 +66,10 @@ body {
     color: #fbfbfb !important;
 }
 
+.blacktext {
+    color: #000000 !important;
+}
+
 .btn-color {
     background-color: #7f32fd;
     color: #fbfbfb;
@@ -76,6 +79,8 @@ body {
 .btn-color:hover {
     background-color: #fbfbfb;
     color: #7f32fd;
+    border: 2px
+
 }
 
 .warningtext {
@@ -83,3 +88,4 @@ body {
     font-size: 1rem;
     font-weight: 200;
 }
+
